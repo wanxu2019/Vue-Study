@@ -27,7 +27,7 @@ module.exports = (options = {}) => ({
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader']
+        use: ['style-loader', 'css-loader', 'postcss-loader','sass-loader']
       },
       {
         test: /\.(png|jpg|jpeg|gif|eot|ttf|woff|woff2|svg|svgz)(\?.+)?$/,
@@ -50,13 +50,15 @@ module.exports = (options = {}) => ({
   ],
   resolve: {
     alias: {
-      '~': resolve(__dirname, 'src')
+        '~': resolve(__dirname, 'src'),
+        //如果我们想使用template，我们不能直接在客户端使用npm install之后的vue，因此添加下面这一行
+        'vue': 'vue/dist/vue.js'
     },
     extensions: ['.js', '.vue', '.json', '.css']
   },
   devServer: {
     host: '127.0.0.1',
-    port: 8010,
+    port: 8020,
     proxy: {
       '/api/': {
         target: 'http://127.0.0.1:8080',
@@ -66,6 +68,8 @@ module.exports = (options = {}) => ({
         }
       }
     },
+    //消除Invalid Host header错误
+    disableHostCheck: true,
     historyApiFallback: {
       index: url.parse(options.dev ? '/assets/' : publicPath).pathname
     }
